@@ -55,7 +55,7 @@ class App extends Component {
     const rounds = this.state.rounds;
     const currentRound = this.state.currentRound;
     if (_.isUndefined(rounds[currentRound])) return new Error('round does not exist');
-    rounds[currentRound].answers[id] = answer;
+    rounds[currentRound].answers[id] = { text: answer, points: 0 };
     this.setState({ rounds });
     this.writeStorage();
   };

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Answers from './components/Answers';
 import Players from './components/Players';
+import Results from './components/Results';
 import Rounds from './components/Rounds';
 import App from './App';
 import './index.css';
@@ -17,7 +18,7 @@ const Routes = () => (
         <Route path="players" component={Players} />
         <Route path="rounds" component={Rounds} />
         <Route path="answers" component={Answers} />
-        <Route path="results" component={Players} />
+        <Route path="results" component={Results} />
         <IndexRoute component={Players} />
       </Route>
     </Router>

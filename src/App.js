@@ -5,7 +5,7 @@ import _ from 'lodash';
 class App extends Component {
 
   emptyRound = {
-    question: 'no question yet...',
+    question: 'Was ist eine Mansube?',
     answers: {},
   };
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Answers from './components/Answers';
 import Players from './components/Players';
 import Rounds from './components/Rounds';
 import App from './App';
@@ -15,7 +16,7 @@ const Routes = () => (
       <Route path="/" component={App}>
         <Route path="players" component={Players} />
         <Route path="rounds" component={Rounds} />
-        <Route path="answers" component={Players} />
+        <Route path="answers" component={Answers} />
         <Route path="results" component={Players} />
         <IndexRoute component={Players} />
       </Route>

@@ -16,7 +16,7 @@ class Rounds extends Component {
   render() {
     return (
       <div>
-        <h2>Rounds</h2>
+        <h2>Runden</h2>
         <List>
           { this.props.rounds.map((round, key) => (
             <ListItem

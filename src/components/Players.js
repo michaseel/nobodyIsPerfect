@@ -32,7 +32,7 @@ class Players extends Component {
   render() {
     return (
       <div>
-        <h2>Players</h2>
+        <h2>Spieler</h2>
         <List>
         { this.props.players.map((player) => (
           <ListItem

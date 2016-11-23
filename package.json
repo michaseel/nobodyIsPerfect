@@ -2,7 +2,9 @@
   "name": "nobodyIsPerfect",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://michaseel.github.io/nobodyIsPerfect",
   "devDependencies": {
+    "gh-pages": "^0.12.0",
     "material-ui": "^0.16.1",
     "react-scripts": "0.7.0",
     "react-tap-event-plugin": "^1.0.0"
@@ -17,7 +19,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "deploy": "npm run build && git add build && git commit -m \"Initial dist subtree commit\" && git subtree push --prefix build origin gh-pages",
+    "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
   }
 }

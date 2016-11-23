@@ -12,20 +12,38 @@ class Results extends Component {
   }
 
   render() {
+    const shuffeledAnswers = this.props.currentRoundData.shuffeledIds.map(id => {
+      if (id === -1) {
+        return {
+          text: this.props.currentRoundData.answer,
+          points: this.props.currentRoundData.points,
+          id,
+          name: 'Richtige Antwort',
+        }
+      } else {
+        const player = _.find(this.props.players, player => player.id === parseInt(id, 10) );
+        if (_.isUndefined(player)) return undefined;
+        return {
+          text: this.props.currentRoundData.answers[id].text,
+          points: 0,
+          id: player.id,
+          name: player.name,
+        }
+      }
+    }).filter(answer => !_.isUndefined(answer));
+    console.log(shuffeledAnswers);
     return (
       <div>
         <h5>Ergebnisse präsentieren</h5>
         <h1>{this.props.currentRoundData.question}</h1>
         <List>
-          { _.map(this.props.currentRoundData.answers, (answer, id) => {
-            const player = _.find(this.props.players, player => player.id === parseInt(id, 10) );
-            if (_.isUndefined(player)) return null;
+          { _.map(shuffeledAnswers, (answer, key) => {
             return (
               <ListItem
-                key={id}
-                onClick={() => console.log('this should open a modal')}
+                key={key}
+                onClick={() => console.log('this should increment the answers points')}
                 primaryText={answer.text}
-                secondaryText={this.state.showPlayers && player.name}
+                secondaryText={this.state.showPlayers && answer.name}
               />
             )
           })

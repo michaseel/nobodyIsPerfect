@@ -6,7 +6,10 @@ class App extends Component {
 
   emptyRound = {
     question: 'Was ist eine Mansube?',
+    answer: 'ein kroatischer Reispott',
+    points: 0,
     answers: {},
+    shuffeledIds: [-1],
   };
 
   constructor(props) {
@@ -16,7 +19,13 @@ class App extends Component {
       rounds: [ this.emptyRound ],
       currentRound: 0,
     };
-    this.state = JSON.parse(localStorage.getItem('state')) || initialState;
+    const parsedState = JSON.parse(localStorage.getItem('state'));
+    if (_.isNull(parsedState)) {
+      this.state = initialState;
+      this.writeStorage();
+    } else {
+      this.state = parsedState;
+    }
   }
 
   updateState = (event) => {
@@ -43,10 +52,11 @@ class App extends Component {
     this.writeStorage();
   };
 
-  setQuestion = (roundId, question) => {
+  setRound = (roundId, question, answer) => {
     const rounds = this.state.rounds;
     if (_.isUndefined(rounds[roundId])) return new Error('round does not exist');
     rounds[roundId].question = question;
+    rounds[roundId].answer = answer;
     this.setState({ rounds });
     this.writeStorage();
   };
@@ -54,8 +64,12 @@ class App extends Component {
   setAnswer = (id, answer) => {
     const rounds = this.state.rounds;
     const currentRound = this.state.currentRound;
-    if (_.isUndefined(rounds[currentRound])) return new Error('round does not exist');
-    rounds[currentRound].answers[id] = { text: answer, points: 0 };
+    const currentRoundData = rounds[currentRound];
+    if (_.isUndefined(currentRoundData)) return new Error('round does not exist');
+    currentRoundData.answers[id] = { text: answer, points: 0 };
+    const answerIds = _.keys(currentRoundData.answers);
+    answerIds.push(-1);
+    currentRoundData.shuffeledIds = _.shuffle(answerIds);
     this.setState({ rounds });
     this.writeStorage();
   };
@@ -102,7 +116,7 @@ class App extends Component {
     const { players, rounds, currentRound } = this.state;
     const currentRoundData = rounds[currentRound];
     return (
-      <Layout currentRound={currentRound}>
+      <Layout currentRound={currentRound} pathname={this.props.location.pathname}>
         {
           cloneElement(
             this.props.children,
@@ -113,7 +127,7 @@ class App extends Component {
               currentRoundData,
               createRound: this.createRound,
               goToRound: this.goToRound,
-              setQuestion: this.setQuestion,
+              setRound: this.setRound,
               setAnswer: this.setAnswer,
               createPlayer: this.createPlayer,
               deletePlayer: this.deletePlayer,

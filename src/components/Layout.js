@@ -8,7 +8,9 @@ const styles = {
   container: {
     // textAlign: 'center',
     paddingBottom: 100,
-    maxWidth: 400,
+    maxWidth: 500,
+    paddingLeft: 20,
+    paddingRight: 20,
     marginLeft: 'auto',
     marginRight: 'auto',
   },

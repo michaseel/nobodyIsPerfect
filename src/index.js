@@ -20,7 +20,7 @@ const Routes = () => (
         <Route path="rounds" component={Rounds} />
         <Route path="answers" component={Answers} />
         <Route path="results" component={Results} />
-        <IndexRoute component={Players} />
+        <IndexRoute component={Results} />
       </Route>
     </Router>
   </MuiThemeProvider>

@@ -57,7 +57,7 @@ class Players extends Component {
           <RaisedButton label="Spieler hinzufügen" onClick={this.addPlayer} />
         </form>
       </div>
-    );
+    ); 
   }
 }
 

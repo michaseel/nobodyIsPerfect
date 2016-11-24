@@ -2,14 +2,13 @@
   "name": "nobodyIsPerfect",
   "version": "0.1.0",
   "private": false,
-  "homepage": "https://michaseel.github.io/nobodyIsPerfect",
   "devDependencies": {
     "gh-pages": "^0.12.0",
-    "material-ui": "^0.16.1",
-    "react-scripts": "0.7.0",
-    "react-tap-event-plugin": "^1.0.0"
+    "react-scripts": "0.7.0"
   },
   "dependencies": {
+    "react-tap-event-plugin": "^1.0.0",
+    "material-ui": "^0.16.1",
     "lodash": "^4.17.2",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
@@ -19,7 +18,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "deploy": "gh-pages -d build",
-    "eject": "react-scripts eject"
+    "deploy": "firebase deploy",
+    "build&deploy": "react-scripts build && firebase deploy"
   }
 }

@@ -1,8 +1,8 @@
 {
   "name": "nobodyIsPerfect",
   "version": "0.1.0",
-  "private": true,
-  "homepage": "http://michaseel.github.io/nobodyIsPerfect",
+  "private": false,
+  "homepage": "https://michaseel.github.io/nobodyIsPerfect",
   "devDependencies": {
     "gh-pages": "^0.12.0",
     "material-ui": "^0.16.1",

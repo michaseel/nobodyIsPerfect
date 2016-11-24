@@ -54,7 +54,7 @@ class Players extends Component {
             onChange={this.handleChange}
             value={this.state.newPlayerName}
           />
-          <RaisedButton label="Add Player" onClick={this.addPlayer} />
+          <RaisedButton label="Spieler hinzufügen" onClick={this.addPlayer} />
         </form>
       </div>
     );

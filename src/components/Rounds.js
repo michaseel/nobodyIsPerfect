@@ -74,10 +74,11 @@ class Rounds extends Component {
           { this.props.rounds.map((round, key) => (
             <ListItem
               key={key}
-              onClick={this.handleOpen(key)}
-              rightIcon={<IconEdit  />}
+              rightIcon={<IconEdit onClick={this.handleOpen(key)} />}
               leftAvatar={
-                <Avatar >{key+1}</Avatar>
+                <Avatar
+                  backgroundColor={key === this.props.currentRound ? '#00BCD4' : 'gray'}
+                  onClick={() => this.props.goToRound(key)} >{key+1}</Avatar>
               }
               primaryText={round.question}
               secondaryText={_.size(round.answers) + ' Antworten'}
@@ -91,7 +92,6 @@ class Rounds extends Component {
           modal={true}
           open={this.state.dialogOpen}
         >
-          Only actions can close this dialog.
           <TextField
             fullWidth
             floatingLabelText="Frage"

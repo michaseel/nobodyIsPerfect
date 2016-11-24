@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
 import Avatar from 'material-ui/Avatar';
 import List from 'material-ui/List/List';
 import ListItem from 'material-ui/List/ListItem';
@@ -7,38 +6,56 @@ import IconEdit from 'material-ui/svg-icons/editor/mode-edit';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-
+import Toggle from 'material-ui/Toggle';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import _ from 'lodash';
+
+const toggleStyle = {
+  marginBottom: 16,
+};
 
 class Rounds extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dialogOpen: false,
+      editModalOpen: false,
+      controlModalOpen: false,
       editRound: 0,
       question: '',
       answer: '',
     }
   }
 
-  handleOpen = (roundId) => () => {
+  handleEditModalOpen = (roundId) => (e) => {
+    e.stopPropagation();
     this.setState({
-      dialogOpen: true,
+      editModalOpen: true,
       editRound: roundId,
       question: this.props.rounds[roundId].question,
       answer: this.props.rounds[roundId].answer,
     });
   };
 
-  handleClose = () => {
-    this.setState({dialogOpen: false});
+  handleEditModalClose = () => {
+    this.setState({ editModalOpen: false });
   };
 
-  handleSave = () => {
+  handleControlModalOpen = (roundId) => () => {
+    this.setState({
+      controlModalOpen: true,
+      editRound: roundId,
+    });
+  };
+
+  handleControlModalClose = () => {
+    this.setState({ controlModalOpen: false });
+  };
+
+  handleEditModalSave = () => {
     const { editRound, question, answer } = this.state;
     this.props.setRound(editRound, question, answer);
-    this.setState({dialogOpen: false});
+    this.setState({editModalOpen: false});
   };
 
   handleChangeQuestion = (event) => {
@@ -54,16 +71,16 @@ class Rounds extends Component {
   };
 
   render() {
-    const dialogActions = [
+    const editModalActions = [
       <FlatButton
         label="Abbrechen"
         secondary
-        onTouchTap={this.handleClose}
+        onTouchTap={this.handleEditModalClose}
       />,
       <FlatButton
         label="Speichern"
         primary
-        onTouchTap={this.handleSave}
+        onTouchTap={this.handleEditModalSave}
       />,
     ];
 
@@ -74,23 +91,64 @@ class Rounds extends Component {
           { this.props.rounds.map((round, key) => (
             <ListItem
               key={key}
-              rightIcon={<IconEdit onClick={this.handleOpen(key)} />}
+              onClick={this.handleControlModalOpen(key)}
+              rightIcon={<IconEdit onClick={this.handleEditModalOpen(key)} />}
               leftAvatar={
                 <Avatar
-                  backgroundColor={key === this.props.currentRound ? '#00BCD4' : 'gray'}
-                  onClick={() => this.props.goToRound(key)} >{key+1}</Avatar>
+                  backgroundColor={key === this.props.currentRound ? '#00BCD4' : 'gray'}>
+                  {key+1}
+                </Avatar>
               }
-              primaryText={round.question}
-              secondaryText={_.size(round.answers) + ' Antworten'}
+              primaryText={`Runde ${key+1}: ${round.question}`}
+              secondaryText={<span style={{color: round.showAnswers ? 'red' : 'gray'}}>
+                {_.size(round.answers)} Antworten {round.showAnswers && 'sichtbar'}
+              </span>}
             />
           ))
           }
         </List>
         <Dialog
+          title={`Runde ${this.state.editRound+1} steuern`}
+          actions={[
+            <FlatButton
+              label="Fertig"
+              primary={true}
+              onTouchTap={this.handleControlModalClose}
+            />
+          ]}
+          modal={false}
+          open={this.state.controlModalOpen}
+          onRequestClose={this.handleControlModalClose}
+        >
+          <Toggle
+            label="Runde aktivieren"
+            labelPosition="right"
+            style={toggleStyle}
+            toggled={this.state.editRound === this.props.currentRound}
+            onToggle={() => this.props.goToRound(this.state.editRound)}
+          />
+          <Toggle
+            label="Antworten sichtbar"
+            labelPosition="right"
+            style={toggleStyle}
+            toggled={this.props.rounds[this.state.editRound].showAnswers}
+            disabled={this.state.editRound !== this.props.currentRound}
+            onToggle={() => this.props.showAnswers(this.state.editRound)}
+          />
+          <Toggle
+            label="Schreiber sichtbar"
+            labelPosition="right"
+            style={toggleStyle}
+            disabled={!this.props.rounds[this.state.editRound].showAnswers}
+            toggled={this.props.rounds[this.state.editRound].showPlayers}
+            onToggle={() => this.props.showPlayers(this.state.editRound)}
+          />
+        </Dialog>
+        <Dialog
           title={`Runde ${this.state.editRound+1} bearbeiten`}
-          actions={dialogActions}
+          actions={editModalActions}
           modal={true}
-          open={this.state.dialogOpen}
+          open={this.state.editModalOpen}
         >
           <TextField
             fullWidth

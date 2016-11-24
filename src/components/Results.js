@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
 import List from 'material-ui/List/List';
 import ListItem from 'material-ui/List/ListItem';
+import Avatar from 'material-ui/Avatar';
 import _ from 'lodash';
 
 class Results extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showPlayers: false,
-    }
-  }
 
   render() {
     const shuffeledAnswers = this.props.currentRoundData.shuffeledIds.map(id => {
@@ -31,19 +26,20 @@ class Results extends Component {
         }
       }
     }).filter(answer => !_.isUndefined(answer));
-    console.log(shuffeledAnswers);
     return (
       <div>
-        <h5>Ergebnisse präsentieren</h5>
         <h1>{this.props.currentRoundData.question}</h1>
         <List>
           { _.map(shuffeledAnswers, (answer, key) => {
             return (
               <ListItem
+                style={{fontSize: 20}}
                 key={key}
                 onClick={() => console.log('this should increment the answers points')}
-                primaryText={answer.text}
-                secondaryText={this.state.showPlayers && answer.name}
+                primaryText={this.props.currentRoundData.showAnswers ? answer.text : '???????????????'}
+                secondaryText={this.props.currentRoundData.showPlayers && answer.name}
+                leftAvatar={<Avatar>{key+1}</Avatar>
+                }
               />
             )
           })

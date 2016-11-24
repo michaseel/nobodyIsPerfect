@@ -10,6 +10,8 @@ class App extends Component {
     points: 0,
     answers: {},
     shuffeledIds: [-1],
+    showAnswers: false,
+    showPlayers: false,
   };
 
   constructor(props) {
@@ -41,15 +43,13 @@ class App extends Component {
   createRound = () => {
     const rounds = this.state.rounds;
     rounds.push({...this.emptyRound});
-    this.setState({ rounds });
-    this.writeStorage();
+    this.setState({ rounds }, this.writeStorage);
   };
 
   goToRound = (roundId) => {
     const rounds = this.state.rounds;
     if (_.isUndefined(rounds[roundId])) return new Error('round does not exist');
-    this.setState({ currentRound: roundId });
-    this.writeStorage();
+    this.setState({ currentRound: roundId }, this.writeStorage);
   };
 
   setRound = (roundId, question, answer) => {
@@ -57,8 +57,21 @@ class App extends Component {
     if (_.isUndefined(rounds[roundId])) return new Error('round does not exist');
     rounds[roundId].question = question;
     rounds[roundId].answer = answer;
-    this.setState({ rounds });
-    this.writeStorage();
+    this.setState({ rounds }, this.writeStorage);
+  };
+
+  showAnswers = (roundId) => {
+    const rounds = this.state.rounds;
+    if (_.isUndefined(rounds[roundId])) return new Error('round does not exist');
+    rounds[roundId].showAnswers = !rounds[roundId].showAnswers;
+    this.setState({ rounds }, this.writeStorage);
+  };
+
+  showPlayers = (roundId) => {
+    const rounds = this.state.rounds;
+    if (_.isUndefined(rounds[roundId])) return new Error('round does not exist');
+    rounds[roundId].showPlayers = !rounds[roundId].showPlayers;
+    this.setState({ rounds }, this.writeStorage);
   };
 
   setAnswer = (id, answer) => {
@@ -70,8 +83,7 @@ class App extends Component {
     const answerIds = _.keys(currentRoundData.answers);
     answerIds.push(-1);
     currentRoundData.shuffeledIds = _.shuffle(answerIds);
-    this.setState({ rounds });
-    this.writeStorage();
+    this.setState({ rounds }, this.writeStorage);
   };
 
   createPlayer = (name) => {
@@ -83,8 +95,7 @@ class App extends Component {
       points: 0,
     };
     players.push(newPlayer);
-    this.setState({ players });
-    this.writeStorage();
+    this.setState({ players }, this.writeStorage);
   };
 
   setPlayerPoints = (id, points) => {
@@ -93,15 +104,13 @@ class App extends Component {
     if (_.isUndefined(player)) return new Error('player does not exist');
     player.points+= points;
     const sortedPlayers = _.sortBy(players, ['points', 'id']).reverse();
-    this.setState({ players: sortedPlayers });
-    this.writeStorage();
+    this.setState({ players: sortedPlayers }, this.writeStorage);
   };
 
   deletePlayer = (id) => {
     const players = this.state.players;
     _.remove(players, player => player.id === id);
-    this.setState({ players });
-    this.writeStorage();
+    this.setState({ players }, this.writeStorage);
   };
 
   componentDidMount() {
@@ -128,6 +137,8 @@ class App extends Component {
               createRound: this.createRound,
               goToRound: this.goToRound,
               setRound: this.setRound,
+              showAnswers: this.showAnswers,
+              showPlayers: this.showPlayers,
               setAnswer: this.setAnswer,
               createPlayer: this.createPlayer,
               deletePlayer: this.deletePlayer,

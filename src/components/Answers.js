@@ -64,7 +64,6 @@ class Answers extends Component {
   render() {
     return (
       <div>
-        <h5>Antworten eingeben:</h5>
         <h1>{this.props.currentRoundData.question}</h1>
 
         <Paper style={this.paperStyle} zDepth={3}>

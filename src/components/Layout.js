@@ -16,13 +16,22 @@ const styles = {
   },
 };
 
+const headlines = {
+  '/results': '- Ergebnisse',
+  '/rounds': '- Runden konfigurieren',
+  '/players': '- Mitspieler',
+  '/answers': '- Antworten eingeben',
+  '/': '',
+};
+
 
 class Layout extends Component {
   render() {
+    const headline = headlines[this.props.pathname];
     return (
       <div className="Layout">
         <AppBar
-          title="Nobody is Perfect"
+          title={'Nobody is Perfect ' + headline }
           iconElementLeft={<Menu />}
           iconElementRight={<Avatar size={35} style={{marginTop: 5}}>{this.props.currentRound + 1}</Avatar>}
         />

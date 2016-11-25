@@ -8,6 +8,7 @@ const styles = {
   container: {
     // textAlign: 'center',
     paddingBottom: 100,
+    paddingTop: '5vh',
     maxWidth: 500,
     paddingLeft: 20,
     paddingRight: 20,

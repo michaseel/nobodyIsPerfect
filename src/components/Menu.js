@@ -7,6 +7,7 @@ import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import IconPersonAdd from 'material-ui/svg-icons/social/person-add';
 import IconAnswer from 'material-ui/svg-icons/action/question-answer';
+import IconHome from 'material-ui/svg-icons/action/home';
 import IconShow from 'material-ui/svg-icons/image/slideshow';
 import IconRound from 'material-ui/svg-icons/image/rotate-left';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
@@ -24,8 +25,10 @@ const Menu = (props) => (
     <MenuItem onClick={() => browserHistory.push('/players')} primaryText="Spieler" leftIcon={<IconPersonAdd />}/>
     <MenuItem primaryText="Runden"  onClick={() => browserHistory.push('/rounds')} leftIcon={<IconRound />} />
     <Divider />
-    <MenuItem primaryText="Ergebnisse" onClick={() => browserHistory.push('/results')} leftIcon={<IconShow />} />
     <MenuItem primaryText="Antworten"  onClick={() => browserHistory.push('/answers')} leftIcon={<IconAnswer />} />
+    <MenuItem primaryText="Ergebnisse" onClick={() => browserHistory.push('/results')} leftIcon={<IconShow />} />
+    <Divider />
+    <MenuItem primaryText="Anleitung" onClick={() => browserHistory.push('/')} leftIcon={<IconHome />} />
   </IconMenu>
 );
 

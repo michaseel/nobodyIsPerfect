@@ -5,7 +5,7 @@ import Avatar from 'material-ui/Avatar';
 import List from 'material-ui/List/List';
 import ListItem from 'material-ui/List/ListItem';
 import IconDelete from 'material-ui/svg-icons/action/delete';
-
+import Paper from 'material-ui/Paper';
 
 class Players extends Component {
   constructor(props) {
@@ -32,22 +32,27 @@ class Players extends Component {
   render() {
     return (
       <div>
-        <h2>Spieler</h2>
-        <List>
-        { this.props.players.map((player) => (
-          <ListItem
-            key={player.id}
-            onClick={() => this.props.setPlayerPoints(player.id, 1)}
-            rightIcon={<IconDelete onClick={() => this.props.deletePlayer(player.id)} />}
-            leftAvatar={
+        <h2>Punktestand</h2>
+
+        <Paper zDepth={2}>
+          <List>
+            { this.props.players.map((player) => (
+              <ListItem
+                key={player.id}
+                onClick={() => this.props.setPlayerPoints(player.id, 1)}
+                onContextMenu={(e) => {e.preventDefault(); this.props.setPlayerPoints(player.id, -1)}}
+                rightIcon={<IconDelete onClick={() => this.props.deletePlayer(player.id)} />}
+                leftAvatar={
               <Avatar >{player.points}</Avatar>
             }
-          >
-            {player.name}
-          </ListItem>
-          ))
-        }
-        </List>
+              >
+                {player.name}
+              </ListItem>
+            ))
+            }
+          </List>
+        </Paper>
+
         <form onSubmit={this.addPlayer}>
           <TextField
             floatingLabelText="Name"
@@ -57,7 +62,7 @@ class Players extends Component {
           <RaisedButton label="Spieler hinzufügen" onClick={this.addPlayer} />
         </form>
       </div>
-    ); 
+    );
   }
 }
 

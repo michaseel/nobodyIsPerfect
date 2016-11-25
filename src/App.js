@@ -60,17 +60,19 @@ class App extends Component {
     this.setState({ rounds }, this.writeStorage);
   };
 
-  showAnswers = (roundId) => {
+  showAnswers = (roundId, value) => {
     const rounds = this.state.rounds;
     if (_.isUndefined(rounds[roundId])) return new Error('round does not exist');
-    rounds[roundId].showAnswers = !rounds[roundId].showAnswers;
+    const valueToSet = _.isUndefined(value) ? !rounds[roundId].showAnswers : value;
+    rounds[roundId].showAnswers = valueToSet;
     this.setState({ rounds }, this.writeStorage);
   };
 
-  showPlayers = (roundId) => {
+  showPlayers = (roundId, value) => {
     const rounds = this.state.rounds;
     if (_.isUndefined(rounds[roundId])) return new Error('round does not exist');
-    rounds[roundId].showPlayers = !rounds[roundId].showPlayers;
+    const valueToSet = _.isUndefined(value) ? !rounds[roundId].showPlayers : value;
+    rounds[roundId].showPlayers = valueToSet;
     this.setState({ rounds }, this.writeStorage);
   };
 
@@ -83,6 +85,16 @@ class App extends Component {
     const answerIds = _.keys(currentRoundData.answers);
     answerIds.push(-1);
     currentRoundData.shuffeledIds = _.shuffle(answerIds);
+    this.setState({ rounds }, this.writeStorage);
+  };
+
+  setAnswerPoints = (id, points) => {
+    const rounds = this.state.rounds;
+    const currentRound = this.state.currentRound;
+    const currentRoundData = rounds[currentRound];
+    if (_.isUndefined(currentRoundData)) return new Error('round does not exist');
+    if (id === -1) currentRoundData.points+= points;
+    else currentRoundData.answers[id].points+= points;
     this.setState({ rounds }, this.writeStorage);
   };
 
@@ -140,6 +152,7 @@ class App extends Component {
               showAnswers: this.showAnswers,
               showPlayers: this.showPlayers,
               setAnswer: this.setAnswer,
+              setAnswerPoints: this.setAnswerPoints,
               createPlayer: this.createPlayer,
               deletePlayer: this.deletePlayer,
               setPlayerPoints: this.setPlayerPoints,

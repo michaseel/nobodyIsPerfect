@@ -6,13 +6,15 @@ import IconEdit from 'material-ui/svg-icons/editor/mode-edit';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import _ from 'lodash';
 
-const toggleStyle = {
-  marginBottom: 16,
+const customContentStyle = {
+  transform: 'translate(0px, 20px)',
+  minWidth: 280,
+  maxWidth: 600,
+  width: '85%'
 };
 
 class Rounds extends Component {
@@ -41,6 +43,13 @@ class Rounds extends Component {
     this.setState({ editModalOpen: false });
   };
 
+  handleEditModalSave = () => {
+    const { editRound, question, answer } = this.state;
+    this.props.setRound(editRound, question, answer);
+    this.setState({editModalOpen: false});
+  };
+
+
   handleControlModalOpen = (roundId) => () => {
     this.setState({
       controlModalOpen: true,
@@ -52,10 +61,9 @@ class Rounds extends Component {
     this.setState({ controlModalOpen: false });
   };
 
-  handleEditModalSave = () => {
-    const { editRound, question, answer } = this.state;
-    this.props.setRound(editRound, question, answer);
-    this.setState({editModalOpen: false});
+  handleControlModalSave = () => {
+    this.props.goToRound(this.state.editRound);
+    this.setState({ controlModalOpen: false });
   };
 
   handleChangeQuestion = (event) => {
@@ -84,6 +92,19 @@ class Rounds extends Component {
       />,
     ];
 
+    const controlModalActions = [
+      <FlatButton
+        label="Abbrechen"
+        secondary
+        onTouchTap={this.handleControlModalClose}
+      />,
+      <FlatButton
+        label="Runde aktivieren"
+        primary
+        onTouchTap={this.handleControlModalSave}
+      />,
+    ];
+
     return (
       <div>
         <h2>Runden</h2>
@@ -108,43 +129,21 @@ class Rounds extends Component {
           }
         </List>
         <Dialog
-          title={`Runde ${this.state.editRound+1} steuern`}
-          actions={[
-            <FlatButton
-              label="Fertig"
-              primary={true}
-              onTouchTap={this.handleControlModalClose}
-            />
-          ]}
+          title={`Runde ${this.state.editRound+1} aktivieren`}
+          actions={controlModalActions}
           modal={false}
           open={this.state.controlModalOpen}
           onRequestClose={this.handleControlModalClose}
         >
-          <Toggle
-            label="Runde aktivieren"
-            labelPosition="right"
-            style={toggleStyle}
-            toggled={this.state.editRound === this.props.currentRound}
-            onToggle={() => this.props.goToRound(this.state.editRound)}
-          />
-          <Toggle
-            label="Antworten sichtbar"
-            labelPosition="right"
-            style={toggleStyle}
-            toggled={this.props.rounds[this.state.editRound].showAnswers}
-            disabled={this.state.editRound !== this.props.currentRound}
-            onToggle={() => this.props.showAnswers(this.state.editRound)}
-          />
-          <Toggle
-            label="Schreiber sichtbar"
-            labelPosition="right"
-            style={toggleStyle}
-            disabled={!this.props.rounds[this.state.editRound].showAnswers}
-            toggled={this.props.rounds[this.state.editRound].showPlayers}
-            onToggle={() => this.props.showPlayers(this.state.editRound)}
-          />
+          {this.state.editRound === this.props.currentRound
+            ? 'Diese Runde ist bereits aktiv!'
+            : 'Möchtest du diese Runde aktivieren?'
+          }
         </Dialog>
         <Dialog
+          contentStyle={customContentStyle}
+          bodyStyle={{ minHeight: 100}}
+          autoScrollBodyContent
           title={`Runde ${this.state.editRound+1} bearbeiten`}
           actions={editModalActions}
           modal={true}
